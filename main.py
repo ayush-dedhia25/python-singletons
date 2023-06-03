@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 
 import geocoder
@@ -7,6 +8,15 @@ from prettytable import PrettyTable
 
 # Environment variables
 env = dotenv_values(".env")
+
+# Logger configuration
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+file_handler = logging.FileHandler("app.log")
+file_handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 
 def fetch_weather_data(lat: Union[float, str], lon: Union[float, str]):
@@ -42,6 +52,7 @@ def extract_required_fields(data: dict):
         }
         return fields
     except KeyError:
+        logger.error("Key not found in the fields dictionary.")
         print("That field does not exist in the data!")
 
 
@@ -53,6 +64,7 @@ def get_current_location() -> Union[tuple[str, str], None]:
         latitude = location.lat
         longitude = location.lng
         return (latitude, longitude)
+    logger.debug("No location was found.")
     return None
 
 
@@ -74,7 +86,5 @@ if __name__ == "__main__":
         data = generate_table_data(cooked_data)
         print(data)
     except Exception as e:
-        # Log the error to the file system and print some helpful information to the user
-        with open("./error.txt", "w+") as f:
-            f.write(str(e))
+        logger.error(str(e))
         print("Something went wrong...!")
