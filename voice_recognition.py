@@ -1,11 +1,15 @@
 import pyttsx3
 import requests
 import speech_recognition as sr
+from dotenv import dotenv_values
 
 # Text to speech recognition
 engine = pyttsx3.init()
 engine.setProperty("rate", 150)  # Speed of the speaker
 engine.setProperty("volume", 1.0)  # volume level of the speaker (0.0 to 1.0)
+
+# Environment variables
+env = dotenv_values(".env")
 
 
 def speak_message(message: str) -> None:
@@ -29,8 +33,8 @@ def ask_to_chatgpt(prompt: str) -> dict:
     """
     headers = {
         "Content-Type": "application/json",
-        "X-RapidAPI-Key": "e5e9d912c4msh3097411c99d1555p125313jsn61d97f29495a",
-        "X-RapidAPI-Host": "openai80.p.rapidapi.com",
+        "X-RapidAPI-Key": env.get("RAPIDAPI_KEY"),
+        "X-RapidAPI-Host": env.get("RAPIDAPI_OPENAI_HOST"),
     }
     payload = {
         "model": "gpt-3.5-turbo",

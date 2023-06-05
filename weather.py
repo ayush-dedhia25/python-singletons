@@ -30,7 +30,7 @@ def fetch_weather_data(lat: Union[float, str], lon: Union[float, str]):
     }
     headers = {
         "X-RapidAPI-Key": env.get("RAPIDAPI_KEY"),
-        "X-RapidAPI-Host": env.get("RAPIDAPI_HOST"),
+        "X-RapidAPI-Host": env.get("RAPIDAPI_WEATHER_HOST"),
     }
     data = requests.get(url, headers=headers, params=query_string).json()
     return data
